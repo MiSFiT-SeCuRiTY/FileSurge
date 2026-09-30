@@ -2,6 +2,9 @@
 
 # ⚡ FILE SURGE
 
+<img width="1578" height="933" alt="Screenshot 2026-09-30 080711" src="https://github.com/user-attachments/assets/8383d976-d328-4ed8-a7a9-cf41f573299c" />
+
+
 ### PUMP • PROCESS • CONTROL
 
 **A cyber-terminal style Windows utility for file size manipulation, analysis, and batch processing.**
