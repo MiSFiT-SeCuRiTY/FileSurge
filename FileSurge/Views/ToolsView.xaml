@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="FileSurge.Views.ToolsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- SIZE CALCULATOR -->
+            <Border Grid.Row="0" Style="{StaticResource CyberPanel}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ SIZE CALCULATOR"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Current size" Foreground="{StaticResource TextPrimaryBrush}"
+                                   FontFamily="{StaticResource MonoFont}" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,6"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource CyberTextBox}" Margin="0,0,6,6"
+                                 Text="{Binding CurrentValue, UpdateSourceTrigger=PropertyChanged}"/>
+                        <ComboBox Grid.Row="0" Grid.Column="2" Style="{StaticResource CyberComboBox}" Margin="0,0,6,6"
+                                  ItemsSource="{Binding Units}" SelectedItem="{Binding CurrentUnit}"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Target size" Foreground="{StaticResource TextPrimaryBrush}"
+                                   FontFamily="{StaticResource MonoFont}" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource CyberTextBox}" Margin="0,0,6,0"
+                                 Text="{Binding TargetValue, UpdateSourceTrigger=PropertyChanged}"/>
+                        <ComboBox Grid.Row="1" Grid.Column="2" Style="{StaticResource CyberComboBox}" Margin="0,0,6,0"
+                                  ItemsSource="{Binding Units}" SelectedItem="{Binding TargetUnit}"/>
+                    </Grid>
+                    <TextBlock Text="{Binding CalcResult}" Foreground="{StaticResource AccentBrush}"
+                               FontFamily="{StaticResource MonoFont}" FontSize="12" Margin="0,12,0,0" LineHeight="20"/>
+                </StackPanel>
+            </Border>
+
+            <!-- HASH CALCULATOR -->
+            <Border Grid.Row="1" Style="{StaticResource CyberPanel}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ HASH CALCULATOR"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Content="BROWSE" Style="{StaticResource BaseButton}" Command="{Binding BrowseHashCommand}" Margin="0,0,6,0"/>
+                        <ComboBox Width="120" Style="{StaticResource CyberComboBox}" Margin="0,0,6,0"
+                                  ItemsSource="{Binding HashAlgorithms}" SelectedItem="{Binding HashAlgorithm}"/>
+                        <Button Content="COMPUTE" Style="{StaticResource PrimaryButton}" Command="{Binding ComputeHashCommand}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding HashFilePath}" Foreground="{StaticResource TextSecondaryBrush}"
+                               FontFamily="{StaticResource MonoFont}" FontSize="11" TextTrimming="CharacterEllipsis" Margin="0,0,0,8"/>
+                    <TextBox Style="{StaticResource CyberTextBox}" IsReadOnly="True" Text="{Binding HashResult, Mode=OneWay}"
+                             FontSize="11" TextWrapping="Wrap" MinHeight="60"/>
+                </StackPanel>
+            </Border>
+
+            <!-- DISK INFO -->
+            <Border Grid.Row="2" Style="{StaticResource CyberPanel}">
+                <StackPanel>
+                    <Grid>
+                        <TextBlock Style="{StaticResource PanelHeader}" Text="▸ DISK SPACE" Margin="0"/>
+                        <Button Content="REFRESH" HorizontalAlignment="Right" Style="{StaticResource BaseButton}"
+                                Command="{Binding RefreshDiskCommand}" Padding="8,2" FontSize="10"/>
+                    </Grid>
+                    <TextBlock Text="{Binding DiskInfo}" Foreground="{StaticResource TextPrimaryBrush}"
+                               FontFamily="{StaticResource MonoFont}" FontSize="12" Margin="0,10,0,0" LineHeight="20"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,45 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Surfaces -->
+    <Color x:Key="BgDeepColor">#FF030708</Color>
+    <Color x:Key="BgPanelColor">#FF060C0D</Color>
+    <Color x:Key="BgElevatedColor">#FF0A1214</Color>
+    <Color x:Key="BgHoverColor">#FF0E1A1C</Color>
+
+    <!-- Accents -->
+    <Color x:Key="AccentColor">#FF00FF9C</Color>
+    <Color x:Key="AccentDimColor">#FF00BFA6</Color>
+    <Color x:Key="DangerColor">#FFFF3344</Color>
+    <Color x:Key="WarnColor">#FFFFB020</Color>
+
+    <!-- Text -->
+    <Color x:Key="TextPrimaryColor">#FFE6FFF5</Color>
+    <Color x:Key="TextSecondaryColor">#FF7F9E95</Color>
+    <Color x:Key="TextDimColor">#FF4A5E58</Color>
+
+    <!-- Borders -->
+    <Color x:Key="BorderColor">#FF122024</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="BgDeepBrush"        Color="{StaticResource BgDeepColor}"/>
+    <SolidColorBrush x:Key="BgPanelBrush"       Color="{StaticResource BgPanelColor}"/>
+    <SolidColorBrush x:Key="BgElevatedBrush"    Color="{StaticResource BgElevatedColor}"/>
+    <SolidColorBrush x:Key="BgHoverBrush"       Color="{StaticResource BgHoverColor}"/>
+
+    <SolidColorBrush x:Key="AccentBrush"        Color="{StaticResource AccentColor}"/>
+    <SolidColorBrush x:Key="AccentDimBrush"     Color="{StaticResource AccentDimColor}"/>
+    <SolidColorBrush x:Key="DangerBrush"        Color="{StaticResource DangerColor}"/>
+    <SolidColorBrush x:Key="WarnBrush"          Color="{StaticResource WarnColor}"/>
+
+    <SolidColorBrush x:Key="TextPrimaryBrush"   Color="{StaticResource TextPrimaryColor}"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}"/>
+    <SolidColorBrush x:Key="TextDimBrush"       Color="{StaticResource TextDimColor}"/>
+
+    <SolidColorBrush x:Key="BorderBrush"        Color="{StaticResource BorderColor}"/>
+
+    <!-- Fonts -->
+    <FontFamily x:Key="MonoFont">Cascadia Mono, Cascadia Code, Consolas</FontFamily>
+    <FontFamily x:Key="UiFont">Segoe UI, Cascadia Mono, Consolas</FontFamily>
+
+</ResourceDictionary>

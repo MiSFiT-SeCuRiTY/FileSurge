@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="FileSurge.Tests/FileSurge.Tests.csproj" />
+  <Project Path="FileSurge/FileSurge.csproj" />
+</Solution>

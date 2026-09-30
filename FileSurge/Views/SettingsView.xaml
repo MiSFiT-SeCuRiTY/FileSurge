@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="FileSurge.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16">
+
+            <Border Style="{StaticResource CyberPanel}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ APPEARANCE"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <TextBlock Text="Theme" Foreground="{StaticResource TextPrimaryBrush}" FontFamily="{StaticResource MonoFont}"
+                                   FontSize="12" VerticalAlignment="Center" Width="180"/>
+                        <TextBox Width="120" Style="{StaticResource CyberTextBox}" Text="{Binding Theme}"/>
+                    </StackPanel>
+                    <CheckBox Content="Animations enabled" Style="{StaticResource CyberCheckBox}"
+                              IsChecked="{Binding AnimationsEnabled}" Margin="0,8,0,0"/>
+                    <CheckBox Content="Compact mode" Style="{StaticResource CyberCheckBox}"
+                              IsChecked="{Binding CompactMode}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CyberPanel}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ PROCESSING"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <TextBlock Text="I/O Buffer Size" Foreground="{StaticResource TextPrimaryBrush}"
+                                   FontFamily="{StaticResource MonoFont}" FontSize="12" VerticalAlignment="Center" Width="180"/>
+                        <TextBox Width="120" Style="{StaticResource CyberTextBox}" Text="{Binding IoBufferSize}"/>
+                    </StackPanel>
+                    <CheckBox Content="Verify after processing" Style="{StaticResource CyberCheckBox}"
+                              IsChecked="{Binding VerifyAfterProcessing}" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CyberPanel}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ LOGGING"/>
+                    <CheckBox Content="Enable logs" Style="{StaticResource CyberCheckBox}" IsChecked="{Binding EnableLogs}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock Text="Log level" Foreground="{StaticResource TextPrimaryBrush}"
+                                   FontFamily="{StaticResource MonoFont}" FontSize="12" VerticalAlignment="Center" Width="180"/>
+                        <TextBox Width="120" Style="{StaticResource CyberTextBox}" Text="{Binding LogLevel}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CyberPanel}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ SAFETY"/>
+                    <CheckBox Content="Confirm overwrite" Style="{StaticResource CyberCheckBox}" IsChecked="{Binding ConfirmOverwrite}"/>
+                    <CheckBox Content="Confirm large-file operations" Style="{StaticResource CyberCheckBox}" IsChecked="{Binding ConfirmLargeFiles}" Margin="0,4,0,0"/>
+                    <CheckBox Content="Keep originals by default" Style="{StaticResource CyberCheckBox}" IsChecked="{Binding KeepOriginalsByDefault}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CyberPanel}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ STARTUP"/>
+                    <CheckBox Content="Show startup animation" Style="{StaticResource CyberCheckBox}" IsChecked="{Binding ShowStartupAnimation}"/>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Content="SAVE" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" Width="120" Height="34"/>
+                <Button Content="RELOAD" Style="{StaticResource BaseButton}" Command="{Binding ReloadCommand}" Width="120" Height="34" Margin="8,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

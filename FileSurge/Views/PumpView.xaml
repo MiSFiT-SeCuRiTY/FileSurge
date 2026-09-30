@@ -1,0 +1,181 @@
+﻿<UserControl x:Class="FileSurge.Views.PumpView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="340"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="180"/>
+        </Grid.RowDefinitions>
+
+        <!-- FILE INPUT -->
+        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CyberPanel}" Margin="0,0,12,12">
+            <StackPanel>
+                <TextBlock Style="{StaticResource PanelHeader}" Text="▸ FILE INPUT"/>
+                <Border x:Name="DropZone" Height="140"
+                        BorderBrush="{StaticResource AccentDimBrush}"
+                        BorderThickness="1" CornerRadius="2"
+                        Background="#0800FF9C"
+                        AllowDrop="True"
+                        DragOver="DropZone_DragOver"
+                        Drop="DropZone_Drop"
+                        MouseLeftButtonUp="DropZone_Click">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="↑" FontSize="32" Foreground="{StaticResource AccentBrush}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="DROP FILE HERE" FontFamily="{StaticResource MonoFont}"
+                                   FontSize="14" Foreground="{StaticResource AccentBrush}"
+                                   HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                        <TextBlock Text="or click to browse" FontFamily="{StaticResource MonoFont}"
+                                   FontSize="11" Foreground="{StaticResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" Style="{StaticResource CyberTextBox}"
+                             Text="{Binding SourcePath, Mode=OneWay}" IsReadOnly="True"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="6,0,0,0">
+                        <Button Content="BROWSE" Style="{StaticResource BaseButton}"
+                                Command="{Binding BrowseCommand}" Margin="0,0,4,0"/>
+                        <Button Content="✕" Style="{StaticResource DangerButton}"
+                                Command="{Binding ClearFileCommand}" Width="32"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- FILE INFORMATION -->
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Style="{StaticResource CyberPanel}" Margin="0,0,0,12">
+            <StackPanel>
+                <TextBlock Style="{StaticResource PanelHeader}" Text="▸ FILE INFORMATION"/>
+                <TextBlock FontFamily="{StaticResource MonoFont}" FontSize="11"
+                           Foreground="{StaticResource TextPrimaryBrush}"
+                           TextWrapping="Wrap" LineHeight="20">
+                    <Run Text="Name        : " Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <Run Text="{Binding FileName, Mode=OneWay}"/><LineBreak/>
+                    <Run Text="Type        : " Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <Run Text="{Binding FileType, Mode=OneWay}"/><LineBreak/>
+                    <Run Text="Size        : " Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <Run Text="{Binding FormattedSize, Mode=OneWay}"/><LineBreak/>
+                    <Run Text="Target Size : " Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <Run Text="{Binding FormattedTarget, Mode=OneWay}"/><LineBreak/>
+                    <Run Text="Padding     : " Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <Run Text="{Binding FormattedPadding, Mode=OneWay}"/><LineBreak/>
+                    <Run Text="SHA-256     : " Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <Run Text="{Binding Sha256Short, Mode=OneWay}" Foreground="{StaticResource AccentDimBrush}"/><LineBreak/>
+                    <Run Text="Created     : " Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <Run Text="{Binding CreatedText, Mode=OneWay}"/><LineBreak/>
+                    <Run Text="Modified    : " Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <Run Text="{Binding ModifiedText, Mode=OneWay}"/>
+                </TextBlock>
+                <Button Content="COPY HASH" Style="{StaticResource BaseButton}"
+                        HorizontalAlignment="Left" Margin="0,12,0,0"
+                        Command="{Binding CopyHashCommand}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- OPTIONS -->
+        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource CyberPanel}" Margin="0,0,12,12">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ TARGET SIZE"/>
+                    <RadioButton GroupName="SizeMode" Style="{StaticResource CyberRadio}"
+                                 Content="Set exact size" IsChecked="{Binding IsExactMode}"/>
+                    <StackPanel Orientation="Horizontal" Margin="24,6,0,10">
+                        <TextBox Width="100" Style="{StaticResource CyberTextBox}"
+                                 Text="{Binding SizeValue, UpdateSourceTrigger=PropertyChanged, StringFormat=F0}"/>
+                        <ComboBox Width="80" Margin="6,0,0,0" Style="{StaticResource CyberComboBox}"
+                                  ItemsSource="{Binding Units}"
+                                  SelectedItem="{Binding SelectedUnit}"/>
+                    </StackPanel>
+                    <RadioButton GroupName="SizeMode" Style="{StaticResource CyberRadio}"
+                                 Content="Add to current size" IsChecked="{Binding IsAddMode}"/>
+                    <RadioButton GroupName="SizeMode" Style="{StaticResource CyberRadio}"
+                                 Content="Make it larger than" IsChecked="{Binding IsMinMode}" Margin="0,6,0,0"/>
+
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ PADDING METHOD" Margin="0,16,0,10"/>
+                    <RadioButton GroupName="Pad" Style="{StaticResource CyberRadio}" Content="Zero Padding" IsChecked="{Binding IsZeroPad}"/>
+                    <RadioButton GroupName="Pad" Style="{StaticResource CyberRadio}" Content="Random Bytes" IsChecked="{Binding IsRandomPad}" Margin="0,6,0,0"/>
+                    <RadioButton GroupName="Pad" Style="{StaticResource CyberRadio}" Content="Cryptographically Secure Random" IsChecked="{Binding IsSecurePad}" Margin="0,6,0,0"/>
+                    <RadioButton GroupName="Pad" Style="{StaticResource CyberRadio}" Content="Repeating Pattern" IsChecked="{Binding IsRepeatingPad}" Margin="0,6,0,0"/>
+                    <TextBox Margin="24,6,0,0" Style="{StaticResource CyberTextBox}"
+                             Text="{Binding PatternHex, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsRepeatingPad}"/>
+                    <RadioButton GroupName="Pad" Style="{StaticResource CyberRadio}" Content="Custom Pattern" IsChecked="{Binding IsCustomPad}" Margin="0,6,0,0"/>
+
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ OUTPUT OPTIONS" Margin="0,16,0,10"/>
+                    <CheckBox Style="{StaticResource CyberCheckBox}" Content="Keep original file" IsChecked="{Binding KeepOriginal}"/>
+                    <CheckBox Style="{StaticResource CyberCheckBox}" Content="Overwrite if exists" IsChecked="{Binding Overwrite}" Margin="0,6,0,0"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                        <CheckBox Style="{StaticResource CyberCheckBox}" Content="Add suffix" IsChecked="{Binding AddSuffix}"/>
+                        <TextBox Width="120" Margin="8,0,0,0" Style="{StaticResource CyberTextBox}"
+                                 Text="{Binding Suffix}"
+                                 IsEnabled="{Binding AddSuffix}"/>
+                    </StackPanel>
+
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ PROCESS" Margin="0,16,0,10"/>
+                    <ProgressBar Height="14" Minimum="0" Maximum="100" Value="{Binding ProgressPercent, Mode=OneWay}"
+                                 Background="#FF0A1214" Foreground="{StaticResource AccentBrush}"
+                                 BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"/>
+                    <Grid Margin="0,6,0,0">
+                        <TextBlock Text="{Binding BytesText}" FontFamily="{StaticResource MonoFont}" FontSize="10"
+                                   Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding ProgressText}" FontFamily="{StaticResource MonoFont}" FontSize="10"
+                                   Foreground="{StaticResource AccentBrush}" HorizontalAlignment="Right"/>
+                    </Grid>
+                    <Grid Margin="0,2,0,0">
+                        <TextBlock Text="{Binding SpeedText}" FontFamily="{StaticResource MonoFont}" FontSize="10"
+                                   Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding EtaText}" FontFamily="{StaticResource MonoFont}" FontSize="10"
+                                   Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Right"/>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button Content="⚡ START SURGE" Style="{StaticResource PrimaryButton}"
+                                Command="{Binding StartCommand}" Width="160" Height="36"/>
+                        <Button Content="■ CANCEL" Style="{StaticResource DangerButton}"
+                                Command="{Binding CancelCommand}" Width="120" Height="36" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- LOG PANEL -->
+        <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource CyberPanel}" Margin="0,0,12,0" Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="0,0,0,6">
+                    <TextBlock Style="{StaticResource PanelHeader}" Text="▸ CONSOLE / LOG" Margin="0"/>
+                    <Button Content="CLEAR" HorizontalAlignment="Right" Style="{StaticResource BaseButton}"
+                            Padding="8,2" FontSize="10"
+                            Click="ClearLog_Click"/>
+                </Grid>
+                <ScrollViewer Grid.Row="1" x:Name="LogScroll" VerticalScrollBarVisibility="Auto"
+                              Background="#FF030708">
+                    <ItemsControl ItemsSource="{Binding Logs}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Formatted}"
+                                           Foreground="{Binding Color}"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           FontSize="10.5"
+                                           Margin="4,1"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
