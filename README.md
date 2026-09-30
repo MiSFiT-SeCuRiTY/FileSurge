@@ -325,37 +325,75 @@ You don't have to trust a random `.exe` on the internet. You can:
 
 ## ⚙️ How It Works
 
+## ⚙️ How It Works
+
 File Surge uses a **stream-based pipeline**. Nothing is buffered entirely in RAM.
 
-┌─────────────────┐
-│   SOURCE FILE   │
-│     (on disk)   │
-└────────┬────────┘
-         │
-         │  read in 1 MiB chunks
-         ▼
-┌─────────────────┐
-│   FileStream    │
-│   (async read)  │
-└────────┬────────┘
-         │
-         ▼
-┌──────────────────────────────────┐
-│    OUTPUT WRITER (FileStream)    │
-│                                  │
-│   ├── copy original bytes        │
-│   │   (exactly as-is)            │
-│   │                              │
-│   └── append padding bytes       │
-│       (from PaddingGenerator)    │
-└────────┬─────────────────────────┘
-         │
-         │  write in 1 MiB chunks
-         ▼
-┌─────────────────┐
-│  DESTINATION    │
-│      FILE       │
-└─────────────────┘
+```text
+SOURCE FILE
+    │
+    │  FileStream
+    │  Async Read
+    ▼
+┌─────────────────────┐
+│  READ 1 MiB CHUNK   │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│   OUTPUT WRITER     │
+│     FileStream      │
+└──────────┬──────────┘
+           │
+           ├──────────────► Copy original bytes exactly as-is
+           │
+           │
+           └──────────────► Append padding bytes
+                            │
+                            │ PaddingGenerator
+                            ▼
+                    ┌─────────────────┐
+                    │ WRITE 1 MiB     │
+                    │ CHUNKS          │
+                    └────────┬────────┘
+                             │
+                             ▼
+                       DESTINATION FILE
+```
+
+### Processing Flow
+
+```text
+Input File
+    │
+    ▼
+File Analyzer
+    │
+    ├── File Size
+    ├── File Type
+    └── File Metadata
+    │
+    ▼
+Size Calculator
+    │
+    ▼
+Calculate Required Padding
+    │
+    ▼
+Pump Engine
+    │
+    ├── Read Original Data
+    │
+    ├── Write Original Data
+    │
+    └── Generate + Write Padding
+    │
+    ▼
+Integrity Verification
+    │
+    ▼
+Completed File
+```
 
 
 ### Step-by-Step Process
@@ -719,6 +757,9 @@ Output: `bin/Release/net10.0-windows/win-x64/publish/FileSurge.exe`
 
 ## 📁 Project Structure
 
+## 📁 Project Structure
+
+```text
 FileSurge/
 │
 ├── FileSurge.sln
@@ -787,3 +828,97 @@ FileSurge/
 │
 └── FileSurge.Tests/
     └── SizeCalculatorTests.cs
+```
+
+---
+
+## 🧰 Technology Stack
+
+| Layer | Technology |
+|---|---|
+| **Language** | C# 13 |
+| **Runtime** | .NET 10 |
+| **UI framework** | WPF |
+| **UI pattern** | MVVM (manual, no framework) |
+| **I/O** | `FileStream`, `BufferedStream`, async read/write |
+| **Hashing** | `System.Security.Cryptography` |
+| **RNG** | `RandomNumberGenerator` (CSPRNG) |
+| **Config** | `System.Text.Json` to `%AppData%` |
+| **Tests** | xUnit |
+| **Packaging** | Self-contained single-file publish |
+
+### Design Choices
+
+- **MVVM without a framework** — no Prism, no MVVM Light. Just `INotifyPropertyChanged` + custom `RelayCommand`.
+- **Streaming-first** — never `File.ReadAllBytes()`. All I/O is chunked and async.
+- **Cancellation-aware** — every long operation accepts a `CancellationToken`.
+- **Zero runtime dependencies** — the app references only the .NET BCL. No NuGet packages at runtime.
+- **Dark by default** — the cyber aesthetic is baked into the theme system, not retrofitted.
+
+---
+
+## ❓ FAQ
+
+**Q: Does this modify my original file?**
+A: No. Unless you check "Overwrite if exists" and target the same path, the source is untouched. Output is a new file with `_pumped` in the name.
+
+**Q: Can I pump a 50 GB file?**
+A: Yes. The engine streams in 1 MiB chunks — memory stays flat regardless of size.
+
+**Q: Will this break my executable?**
+A: The original bytes stay intact. Windows will still run the `.exe` because PE loaders ignore trailing data. **But you should not pump system files or files you didn't create.**
+
+**Q: Does this bypass antivirus?**
+A: No. Modern AV scans file contents, not just sizes. This tool changes size and hash — nothing more.
+
+**Q: Why is the download 144 MB?**
+A: It's self-contained — the .NET runtime is bundled in. No dependency install needed. See [About the 144 MB Size](#️-about-the-144-mb-size).
+
+**Q: Why does Windows show a warning?**
+A: The app is not code-signed. Click **More info → Run anyway**. See [About Windows SmartScreen Warnings](#️-about-windows-smartscreen-warnings).
+
+**Q: Will it work on Windows 7?**
+A: No. Minimum is Windows 10 build 19041.
+
+**Q: Can I use it on macOS / Linux?**
+A: No. It's a WPF app — Windows-only by design.
+
+**Q: Does it phone home?**
+A: No. Zero network calls. Test with Wireshark if you don't believe me.
+
+**Q: Is it safe?**
+A: Yes. It only appends bytes. It doesn't execute files, doesn't touch the registry, doesn't phone home.
+
+**Q: How do I uninstall?**
+A: It's portable. Delete `FileSurge.exe`. Optionally delete `%AppData%\FileSurge\` to clear settings.
+
+**Q: How do I reset settings?**
+A: Delete `%AppData%\FileSurge\settings.json`. Restart the app.
+
+**Q: How do I verify the download is genuine?**
+A: Compare the SHA-256 hash from the release page with `Get-FileHash FileSurge.exe -Algorithm SHA256` in PowerShell.
+
+**Q: Can I contribute?**
+A: Yes — fork the repo, make changes, submit a pull request.
+
+---
+
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE) for the full text.
+
+You are free to use, modify, and distribute this software, including commercially, as long as you retain the copyright notice and license text.
+
+---
+
+<div align="center">
+
+**⚡ FILE SURGE ⚡**
+
+**PUMP • PROCESS • CONTROL**
+
+Built with C# and WPF on .NET 10.
+
+[Download](https://github.com/MiSFiT-SecuRiTY/FileSurge/releases/latest) • [Report Bug](https://github.com/MiSFiT-SecuRiTY/FileSurge/issues) • [Source](https://github.com/MiSFiT-SecuRiTY/FileSurge)
+
+</div>
