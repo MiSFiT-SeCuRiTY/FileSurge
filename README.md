@@ -760,8 +760,6 @@ Output: `bin/Release/net10.0-windows/win-x64/publish/FileSurge.exe`
 
 ## 📁 Project Structure
 
-## 📁 Project Structure
-
 ```text
 FileSurge/
 │
