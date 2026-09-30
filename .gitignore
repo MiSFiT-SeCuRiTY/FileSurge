@@ -1,0 +1,60 @@
+## .NET / Visual Studio build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio user files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.userprefs
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## VS Code
+.vscode/
+
+## Debug symbols
+*.pdb
+*.ilk
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+
+## Test results
+[Tt]est[Rr]esult*/
+TestResult.xml
+coverage*.json
+coverage*.xml
+
+## Secrets
+secrets.json
+*.local.json
+*.pfx
+*.snk
+*.key
+*.pem
+
+## OS junk
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+## Publish / build folders
+publish/
+Publish/
+C:/Projects/FileSurgePublish/
+C:/Projects/FileSurgeInstaller/
+*.iss
